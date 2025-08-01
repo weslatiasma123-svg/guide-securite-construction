@@ -7,6 +7,7 @@
   <meta name="keywords" content="risques BTP, sécurité chantier, prévention, chute, électrocution, bruit, normes NF, génie civil">
   <meta name="author" content="Weslati Asma">
   <title>Risques du BTP - Guide Sécurité Chantier</title>
+
   <!-- Style -->
   <style>
     body {
@@ -123,25 +124,30 @@
   </style>
 </head>
 <body>
+
   <div class="container">
     <header>
       <h1>📊 Guide des Risques du BTP</h1>
       <p class="subtitle">Prévention, normes et mesures de sécurité conformes aux référentiels NF</p>
     </header>
+
     <div class="search-box">
       <input type="text" id="searchInput" placeholder="🔍 Rechercher un risque (ex: chute, électrocution, bruit...)">
       <button onclick="rechercherRisque()" class="btn-search">Rechercher</button>
       <button onclick="afficherListe()" class="btn-list">Tous les risques</button>
       <button onclick="resetResult()" class="btn-reset">Accueil</button>
     </div>
+
     <div id="resultContainer" class="result-container">
       <p>👉 Entrez un mot-clé ou cliquez sur "Tous les risques" pour commencer.</p>
       <p><strong>Exemples :</strong> chute, électrocution, manutention, bruit, incendie, ferraillage</p>
     </div>
+
     <footer>
       &copy; 2025 Guide Sécurité Chantier | 0 incident = 100 % sécurité
     </footer>
   </div>
+
   <script>
     // Base de données complète des risques du BTP
     const risquesBTP = {
@@ -286,42 +292,46 @@
         equipements: ["Boîte à idées", "Service médecine du travail", "Cellule d'écoute"]
       }
     };
+
     // Fonction de recherche
     function rechercherRisque() {
       const input = document.getElementById("searchInput").value.trim().toLowerCase();
       const resultContainer = document.getElementById("resultContainer");
+      
       if (!input) {
         resultContainer.innerHTML = "<p>Veuillez entrer un mot-clé.</p>";
         return;
       }
+
       let found = null;
+
       // 1. Recherche exacte dans les noms
       if (risquesBTP[input]) {
-        found = { name: input,  risquesBTP[input] };
+        found = { name: input, data: risquesBTP[input] };
       }
+
       // 2. Recherche partielle dans les noms
       if (!found) {
-        for (const [name, data] of Object.entries(risquesBTP)) {
+        for (const name in risquesBTP) {
           if (name.includes(input)) {
-            found = { name, data };
+            found = { name, data: risquesBTP[name] };
             break;
           }
         }
       }
-      // 3. Recherche dans les mots-clés (simulée)
+
+      // 3. Recherche dans les descriptions et mesures (optionnel)
       if (!found) {
-        for (const [name, data] of Object.entries(risquesBTP)) {
-          const motsCles = [
-            ...name.split(' '),
-            ...data.prevention.join(' ').toLowerCase().split(' '),
-            ...data.equipements.join(' ').toLowerCase().split(' ')
-          ];
-          if (motsCles.some(mot => mot.includes(input))) {
+        for (const name in risquesBTP) {
+          const data = risquesBTP[name];
+          const text = (data.description + ' ' + data.prevention.join(' ')).toLowerCase();
+          if (text.includes(input)) {
             found = { name, data };
             break;
           }
         }
       }
+
       // Affichage
       if (found) {
         const { name, data } = found;
@@ -329,14 +339,18 @@
         html += `<div class="section-title">Catégorie :</div> <span class="category">${data.categorie}</span><br>`;
         html += `<div class="section-title">Norme :</div> <span class="norme">${data.norme}</span><br>`;
         html += `<div class="section-title">Description :</div> ${data.description}<br>`;
+        
         html += `<div class="section-title">Mesures de prévention :</div><ul>`;
         data.prevention.forEach(p => html += `<li>${p}</li>`);
         html += `</ul>`;
+        
         html += `<div class="section-title">Équipements requis :</div><ul>`;
         data.equipements.forEach(e => html += `<li>${e}</li>`);
         html += `</ul>`;
+        
         html += `<div class="section-title">Conseil Ingénieur :</div>`;
-        html += `<p>Avant de recourir aux EPI, il faut toujours chercher à éliminer ou réduire les risques par des EPC.</p>`;
+        html += `<p>La prévention technique prime sur la protection individuelle.</p>`;
+        
         resultContainer.innerHTML = html;
       } else {
         resultContainer.innerHTML = `
@@ -352,24 +366,30 @@
         `;
       }
     }
+
     // Afficher la liste complète
     function afficherListe() {
       const resultContainer = document.getElementById("resultContainer");
       const sortedRisques = Object.keys(risquesBTP).sort();
+      
       let html = `<h2>Liste des Risques du BTP</h2>`;
       html += `<p>Nombre total : ${sortedRisques.length}</p>`;
       html += `<div style="margin-top: 20px;">`;
+      
       sortedRisques.forEach(risque => {
         html += `<div class="risk-item" onclick="selectRisque('${risque}')">${risque}</div>`;
       });
+      
       html += `</div>`;
       resultContainer.innerHTML = html;
     }
+
     // Sélectionner un risque au clic
     function selectRisque(name) {
       document.getElementById("searchInput").value = name;
       rechercherRisque();
     }
+
     // Réinitialiser
     function resetResult() {
       document.getElementById("searchInput").value = "";
@@ -379,6 +399,7 @@
         <p><strong>Exemples :</strong> chute, électrocution, manutention, bruit, incendie, ferraillage</p>
       `;
     }
+
     // Permet de valider avec "Entrée"
     document.getElementById("searchInput").addEventListener("keypress", function(e) {
       if (e.key === "Enter") {
