@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Guide des risques du BTP : chute de hauteur, électrocution, bruit, manutentions... Mesures de prévention conformes aux normes NF.">
+  <meta name="keywords" content="risques BTP, sécurité chantier, prévention, chute, électrocution, bruit, normes NF, génie civil">
+  <meta name="author" content="Weslati Asma">
+  <title>Risques du BTP - Guide Sécurité Chantier</title>
+
+  <!-- Style -->
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f7fc;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    h1 {
+      color: #005b96;
+      margin: 0;
+    }
+    .subtitle {
+      color: #555;
+      font-size: 1.1em;
+      margin: 10px 0;
+    }
+    .search-box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    #searchInput {
+      padding: 12px;
+      width: 70%;
+      font-size: 16px;
+      border: 2px solid #0077b6;
+      border-radius: 8px;
+      outline: none;
+    }
+    button {
+      padding: 10px 16px;
+      font-size: 14px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .btn-search {
+      background-color: #0077b6;
+      color: white;
+    }
+    .btn-list {
+      background-color: #28a745;
+      color: white;
+    }
+    .btn-reset {
+      background-color: #6c757d;
+      color: white;
+    }
+    .result-container {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      background-color: #f9fafa;
+      min-height: 200px;
+      font-size: 16px;
+      line-height: 1.7;
+    }
+    .result-container h2 {
+      color: #005b96;
+      margin-top: 0;
+    }
+    ul {
+      padding-left: 20px;
+    }
+    .section-title {
+      font-weight: bold;
+      color: #003366;
+      margin: 15px 0 5px 0;
+    }
+    .category {
+      font-weight: bold;
+      color: #c00;
+    }
+    .norme {
+      font-family: monospace;
+      background: #eee;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      color: #666;
+      font-size: 14px;
+    }
+    .risk-item {
+      cursor: pointer;
+      padding: 8px;
+      margin: 4px 0;
+      background: #f0f4f8;
+      border-left: 4px solid #0077b6;
+    }
+    .risk-item:hover {
+      background: #e0e8f0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>📊 Guide des Risques du BTP</h1>
+      <p class="subtitle">Prévention, normes et mesures de sécurité conformes aux référentiels NF</p>
+    </header>
+
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="🔍 Rechercher un risque (ex: chute, électrocution, bruit...)">
+      <button onclick="rechercherRisque()" class="btn-search">Rechercher</button>
+      <button onclick="afficherListe()" class="btn-list">Tous les risques</button>
+      <button onclick="resetResult()" class="btn-reset">Accueil</button>
+    </div>
+
+    <div id="resultContainer" class="result-container">
+      <p>👉 Entrez un mot-clé ou cliquez sur "Tous les risques" pour commencer.</p>
+      <p><strong>Exemples :</strong> chute, électrocution, manutention, bruit, incendie, ferraillage</p>
+    </div>
+
+    <footer>
+      &copy; 2025 Guide Sécurité Chantier | 0 incident = 100 % sécurité
+    </footer>
+  </div>
+
+  <script>
+    // Base de données complète des risques du BTP
+    const risquesBTP = {
+      "chute de hauteur": {
+        categorie: "RISQUE GRAVE - CAT IV",
+        norme: "NF X35-102",
+        description: "Chute de niveau >= 2 mètres",
+        prevention: [
+          "Mise en place d'un Plan Général de Prévention des Chutes",
+          "Installation de garde-corps type NF P01-012",
+          "Utilisation de harnais type EN 361",
+          "Vérification des échafaudages selon NF EN 12810",
+          "Formation obligatoire des utilisateurs",
+          "Contrôle mensuel des équipements de protection"
+        ],
+        equipements: ["Harnais EN 361", "Corde EN 1891", "Garde-corps NF P01-012"]
+      },
+      "blessures par outils ou machines": {
+        categorie: "RISQUE MOYEN - CAT III",
+        norme: "NF X35-106",
+        description: "Outils électriques et machines diverses",
+        prevention: [
+          "Maintenance préventive selon plan MSMP",
+          "Vérification périodique des outils",
+          "Port obligatoire des EPI selon NF EN 166",
+          "Formation spécifique à chaque type d'outil",
+          "Zonage sécurisé des zones de travail",
+          "Arrêt d'urgence accessible sur machines"
+        ],
+        equipements: ["Lunettes EN 166", "Gants EN 374", "Casque EN 397"]
+      },
+      "électrocution": {
+        categorie: "RISQUE GRAVE - CAT IV",
+        norme: "NF C 18-510",
+        description: "Contact avec installation électrique",
+        prevention: [
+          "Application du DTU 16.3 pour installations provisoires",
+          "Vérification périodique des différentiels (30mA)",
+          "Verrouillage et signalisation des tableaux",
+          "Formation Habilitation Électrique",
+          "Mesure d'isolement avant mise en service",
+          "Zonage des zones électriques dangereuses"
+        ],
+        equipements: ["Gants isolants classe 00", "Verges télécommandées", "Détecteur de présence"]
+      },
+      "manutentions lourdes": {
+        categorie: "RISQUE MOYEN - CAT III",
+        norme: "NF X35-109",
+        description: "Levage et déplacement de charges > 25kg",
+        prevention: [
+          "Calcul de la charge admissible selon DTU 13.12",
+          "Vérification des CMA des engins",
+          "Formation des grutiers et manoeuvres",
+          "Respect des angles de levage",
+          "Utilisation de signaleur",
+          "Plan de levage pour charges > 100kg"
+        ],
+        equipements: ["Harnais de levage EN 1492-1", "Élingues certifiées", "Palonnier EN 13414"]
+      },
+      "exposition aux produits chimiques": {
+        categorie: "RISQUE MOYEN - CAT III",
+        norme: "NF X35-107",
+        description: "Contact avec produits dangereux",
+        prevention: [
+          "Consultation des Fiches de Données Sécurité",
+          "Ventilation mécanique selon DTU 60.1",
+          "Stockage sécurisé avec seuil de compatibilité",
+          "Formation SST Chimie",
+          "Surveillance médicale",
+          "Étiquetage conforme CLP"
+        ],
+        equipements: ["Masque FFP2", "Blouse chimique EN 14194", "Lunettes anti-éclaboussures EN 166"]
+      },
+      "bruit excessif": {
+        categorie: "RISQUE MOYEN - CAT III",
+        norme: "NF X35-108",
+        description: "Exposition > 85dB(A) sur 8h",
+        prevention: [
+          "Évaluation du bruit selon NF X35-112",
+          "Hiérarchisation des sources",
+          "Port obligatoire des protecteurs auditifs",
+          "Rotation des équipes",
+          "Maintenance des outils pour réduire le bruit",
+          "Zones sourdes pour repos"
+        ],
+        equipements: ["Casque anti-bruit SNR > 25dB", "Bouchons moulés", "Dosimètres individuels"]
+      },
+      "effondrement ou éboulement": {
+        categorie: "RISQUE GRAVE - CAT IV",
+        norme: "NF X35-104",
+        description: "Instabilité des parois, fouilles",
+        prevention: [
+          "Calcul de stabilité selon Eurocode 7",
+          "Fouilles avec talus selon angle de frottement",
+          "Installation d'étaiements selon DTU 13.2",
+          "Contrôle géotechnique périodique",
+          "Signalisation des zones interdites",
+          "Plan de surveillance des mouvements"
+        ],
+        equipements: ["Casque EN 397", "Ceinture de sécurité", "Système d'alarme"]
+      },
+      "incendie ou explosion": {
+        categorie: "RISQUE GRAVE - CAT IV",
+        norme: "NF X35-105",
+        description: "Combustion de matériaux, gaz",
+        prevention: [
+          "PCI selon DTU 61.1",
+          "Stockage des produits inflammables sécurisé",
+          "Extincteurs adaptés",
+          "Dégagement minimum 3m",
+          "Formation des premiers intervenants",
+          "Signalisation lumineuse et sonore"
+        ],
+        equipements: ["Extincteur poudre ABC", "Couverture ignifuge", "Détecteur de fumée"]
+      },
+      "conditions climatiques": {
+        categorie: "RISQUE MOYEN - CAT III",
+        norme: "NF X35-110",
+        description: "Température, vent, pluie, neige",
+        prevention: [
+          "Suivi météorologique selon DTU 43.1",
+          "Adaptation des horaires de travail",
+          "Hydratation obligatoire",
+          "Protection contre les rayons UV",
+          "Plan d'intervention en cas de grand froid",
+          "Aménagement de refuges climatiques"
+        ],
+        equipements: ["Thermomètre", "Hygromètre", "Vêtements de protection"]
+      },
+      "risque psychosocial": {
+        categorie: "RISQUE MOYEN - CAT III",
+        norme: "INRS ED 6004",
+        description: "Stress, harcèlement, charge mentale",
+        prevention: [
+          "Évaluation des risques psychosociaux",
+          "Mise en place d'un CHSCT fonctionnel",
+          "Formation des encadrants à l'écoute",
+          "Politique de zéro tolérance au harcèlement",
+          "Aménagement du temps de travail",
+          "Accès à un service de soutien psychologique"
+        ],
+        equipements: ["Boîte à idées", "Service médecine du travail", "Cellule d'écoute"]
+      }
+    };
+
+    // Fonction de recherche
+    function rechercherRisque() {
+      const input = document.getElementById("searchInput").value.trim().toLowerCase();
+      const resultContainer = document.getElementById("resultContainer");
+      
+      if (!input) {
+        resultContainer.innerHTML = "<p>Veuillez entrer un mot-clé.</p>";
+        return;
+      }
+
+      let found = null;
+
+      // 1. Recherche exacte dans les noms
+      if (risquesBTP[input]) {
+        found = { name: input, data: risquesBTP[input] };
+      }
+
+      // 2. Recherche partielle dans les noms
+      if (!found) {
+        for (const [name, data] of Object.entries(risquesBTP)) {
+          if (name.includes(input)) {
+            found = { name, data };
+            break;
+          }
+        }
+      }
+
+      // 3. Recherche dans les mots-clés (simulée)
+      if (!found) {
+        for (const [name, data] of Object.entries(risquesBTP)) {
+          const motsCles = [
+            ...name.split(' '),
+            ...data.prevention.join(' ').toLowerCase().split(' '),
+            ...data.equipements.join(' ').toLowerCase().split(' ')
+          ];
+          if (motsCles.some(mot => mot.includes(input))) {
+            found = { name, data };
+            break;
+          }
+        }
+      }
+
+      // Affichage
+      if (found) {
+        const { name, data } = found;
+        let html = `<h2>${name.toUpperCase()}</h2>`;
+        html += `<div class="section-title">Catégorie :</div> <span class="category">${data.categorie}</span><br>`;
+        html += `<div class="section-title">Norme :</div> <span class="norme">${data.norme}</span><br>`;
+        html += `<div class="section-title">Description :</div> ${data.description}<br>`;
+        
+        html += `<div class="section-title">Mesures de prévention :</div><ul>`;
+        data.prevention.forEach(p => html += `<li>${p}</li>`);
+        html += `</ul>`;
+        
+        html += `<div class="section-title">Équipements requis :</div><ul>`;
+        data.equipements.forEach(e => html += `<li>${e}</li>`);
+        html += `</ul>`;
+        
+        html += `<div class="section-title">Conseil Ingénieur :</div>`;
+        html += `<p>La prévention technique prime sur la protection individuelle.</p>`;
+        
+        resultContainer.innerHTML = html;
+      } else {
+        resultContainer.innerHTML = `
+          <h2>Risque non identifié</h2>
+          <p>Aucun risque trouvé pour <strong>"${input}"</strong>.</p>
+          <div class="section-title">Mesures générales de sécurité :</div>
+          <ul>
+            <li>Portez toujours les EPI requis.</li>
+            <li>Respectez le plan de prévention du chantier.</li>
+            <li>Signalez tout danger immédiatement.</li>
+            <li>Ne travaillez jamais seul en zone dangereuse.</li>
+          </ul>
+        `;
+      }
+    }
+
+    // Afficher la liste complète
+    function afficherListe() {
+      const resultContainer = document.getElementById("resultContainer");
+      const sortedRisques = Object.keys(risquesBTP).sort();
+      
+      let html = `<h2>Liste des Risques du BTP</h2>`;
+      html += `<p>Nombre total : ${sortedRisques.length}</p>`;
+      html += `<div style="margin-top: 20px;">`;
+      
+      sortedRisques.forEach(risque => {
+        html += `<div class="risk-item" onclick="selectRisque('${risque}')">${risque}</div>`;
+      });
+      
+      html += `</div>`;
+      resultContainer.innerHTML = html;
+    }
+
+    // Sélectionner un risque au clic
+    function selectRisque(name) {
+      document.getElementById("searchInput").value = name;
+      rechercherRisque();
+    }
+
+    // Réinitialiser
+    function resetResult() {
+      document.getElementById("searchInput").value = "";
+      const resultContainer = document.getElementById("resultContainer");
+      resultContainer.innerHTML = `
+        <p>👉 Entrez un mot-clé ou cliquez sur "Tous les risques" pour commencer.</p>
+        <p><strong>Exemples :</strong> chute, électrocution, manutention, bruit, incendie, ferraillage</p>
+      `;
+    }
+
+    // Permet de valider avec "Entrée"
+    document.getElementById("searchInput").addEventListener("keypress", function(e) {
+      if (e.key === "Enter") {
+        rechercherRisque();
+      }
+    });
+  </script>
+</body>
+</html>
